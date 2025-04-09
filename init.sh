@@ -52,6 +52,7 @@ echo "npm 의존성 설치 완료."
 echo "Android SDK 설치 및 설정을 시작합니다..."
 ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 CMDLINE_TOOLS_PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
+PLATFORM_TOOLS_PATH="$ANDROID_SDK_ROOT/platform-tools"
 SDKMANAGER="$CMDLINE_TOOLS_PATH/sdkmanager"
 
 if [ ! -f "$SDKMANAGER" ]; then
@@ -84,23 +85,25 @@ fi
 
 # 환경 변수 설정 (현재 세션 + 영구 적용)
 export ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT
-export PATH=$PATH:$CMDLINE_TOOLS_PATH
+export ANDROID_HOME=$ANDROID_SDK_ROOT
+export PATH=$PATH:$CMDLINE_TOOLS_PATH:$PLATFORM_TOOLS_PATH
 
 # .bashrc 에 영구 적용
 if ! grep -q "ANDROID_SDK_ROOT" ~/.bashrc; then
     echo "환경 변수를 .bashrc에 추가합니다..."
     echo "export ANDROID_SDK_ROOT=\$HOME/Android/Sdk" >> ~/.bashrc
-    echo "export PATH=\$PATH:\$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> ~/.bashrc
+    echo "export ANDROID_HOME=\$HOME/Android/Sdk" >> ~/.bashrc
+    echo "export PATH=\$PATH:\$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:\$ANDROID_SDK_ROOT/platform-tools" >> ~/.bashrc
     source ~/.bashrc
     echo ".bashrc 업데이트 완료."
 else
-    echo ".bashrc 에 이미 ANDROID_SDK_ROOT 설정이 존재합니다."
+    echo ".bashrc 에 이미 환경변수가 설정되어 있습니다."
 fi
 
 # 필요한 SDK 패키지 설치
 PLATFORM_VERSION="android-35"
 BUILD_TOOLS_VERSION="35.0.0"
-REQUIRED_PACKAGES="platforms;$PLATFORM_VERSION build-tools;$BUILD_TOOLS_VERSION"
+REQUIRED_PACKAGES="platforms;$PLATFORM_VERSION build-tools;$BUILD_TOOLS_VERSION platform-tools"
 
 echo "SDK 라이선스 동의를 시도합니다..."
 yes | "$SDKMANAGER" --licenses > /dev/null || echo "라이선스 동의 중 오류 발생 가능성 있음. 수동 확인 필요."
