@@ -141,7 +141,7 @@ fi
 
 echo "프로젝트 초기 설정이 완료되었습니다!"
 echo "이제 다음 명령어를 사용하여 앱을 실행할 수 있습니다:"
-echo " - Android: npm run android"
-echo " - iOS: npm run ios (iOS 설정이 완료된 경우)"
+echo "cd android && ./gradlew assembleDebug를 실행하여 빌드해주세요"
+echo " - Android: npm run start"
 
 exit 0
